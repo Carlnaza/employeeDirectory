@@ -1,23 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Form from './components/Form'
 import EmployeeCard from './components/EmployeeCard'
-import employeeJSON from './db/employees.json'
-
-const employeeList = employeeJSON
+import db from './db/employees.json'
 
 class App extends Component {
 
   state = {
-    first_name: ' ', 
-    last_name: ' ',
-    username: ' ',
-    email: ' ',
-    password: ' ',
-    fname: ' ',
-    lname: ' ',
-    uname: ' ',
-    em: ' ',
-    pwd: ' '
+    searchInp: '',
+    input: '',
+    category: 'country',
+    categorySel: ''
   }
 
   handleInputChange = event => {
@@ -26,18 +18,30 @@ class App extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault()
-    this.setState({
-      fname: this.state.first_name,
-      lname: this.state.last_name,
-      uname: this.state.username,
-      em: this.state.email,
-      pwd: this.state.password,
-      first_name: ' ',
-      last_name: ' ',
-      username: ' ',
-      email: ' ',
-      password: ' '
-    })
+    this.setState({ searchInp: this.state.input, input: '', category: '', categorySel: this.state.category })
+  }
+
+  handleSelectChange = event => {
+    this.setState({ category: (event.target.value).toLowerCase() })
+  }
+
+  renderEmployees (cat) {
+    if(this.state.searchInp !== '') { 
+    return db.map((emp, i) => {
+     if(cat === 'department'){
+       if(emp.department === this.state.searchInp){
+         return <EmployeeCard emp={emp} key={i} />
+       } 
+      } else {
+        if (emp.country === this.state.searchInp) {
+          return <EmployeeCard emp={emp} key={i} />
+        }
+      }
+     })
+    }
+    else {
+     return db.map((emp, i) => <EmployeeCard emp={emp} key={i} />)
+    }
   }
 
   render() {
@@ -45,16 +49,17 @@ class App extends Component {
       <>
         <div className="uk-flex uk-flex-center">
           <Form
-            formValue={this.state}
-            inputChange={this.handleInputChange}
-            formSubmit={this.handleFormSubmit}
+            input={this.state.input}
+            handleInputChange={this.handleInputChange}
+            handleFormSubmit={this.handleFormSubmit}
+            handleSelectChange={this.handleSelectChange}
           />
         </div>
         <div>
           <h2 className="uk-text-muted uk-text-center uk-text-light">Current Employees</h2>
-            <ul>
-              {employeeList.map(info => <EmployeeCard empInfo={info} />)}
-            </ul>
+          <ul>
+            {this.renderEmployees(this.state.category)}
+          </ul>
         </div>
       </>
     )
