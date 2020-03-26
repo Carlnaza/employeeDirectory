@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import Card from './components/EmployeeCard';
 import Form from './components/Form'
-import EmployeeCard from './components/EmployeeCard'
-import db from './db/employees.json'
+import db from './db/db.json';
 
 class App extends Component {
 
@@ -18,51 +18,51 @@ class App extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault()
+    console.log(this.state.input)
     this.setState({ searchInp: this.state.input, input: '', category: '', categorySel: this.state.category })
   }
 
   handleSelectChange = event => {
-    this.setState({ category: (event.target.value).toLowerCase() })
+    let newCat = event.target.value
+    this.setState({ category: newCat.toLowerCase() })
   }
 
-  renderEmployees (cat) {
-    if(this.state.searchInp !== '') { 
-    return db.map((emp, i) => {
-     if(cat === 'department'){
-       if(emp.department === this.state.searchInp){
-         return <EmployeeCard emp={emp} key={i} />
-       } 
-      } else {
-        if (emp.country === this.state.searchInp) {
-          return <EmployeeCard emp={emp} key={i} />
+  renderEmployees(cat) {
+    if (this.state.searchInp !== '') {
+      // eslint-disable-next-line
+      return db.map((emp, i) => {
+        if (cat === 'department') {
+          if (emp.department === this.state.searchInp) {
+            return <Card emp={emp} key={i} />
+          }
+        } else {
+          if (emp.country === this.state.searchInp) {
+            return <Card emp={emp} key={i} />
+          }
         }
-      }
-     })
-    }
-    else {
-     return db.map((emp, i) => <EmployeeCard emp={emp} key={i} />)
+      })
+    } else {
+      return db.map((emp, i) => <Card emp={emp} key={i} />)
     }
   }
 
   render() {
+
     return (
       <>
-        <div className="uk-flex uk-flex-center">
+        <div className="uk-container">
           <Form
             input={this.state.input}
             handleInputChange={this.handleInputChange}
             handleFormSubmit={this.handleFormSubmit}
             handleSelectChange={this.handleSelectChange}
           />
-        </div>
-        <div>
-          <h2 className="uk-text-muted uk-text-center uk-text-light">Current Employees</h2>
-          <ul>
-            {this.renderEmployees(this.state.category)}
-          </ul>
+          <div className="uk-row uk-margin-top uk-margin-bottom">
+            {this.renderEmployees(this.state.categorySel)}
+          </div>
         </div>
       </>
-    )
+    );
   }
 }
 

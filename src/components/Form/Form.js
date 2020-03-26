@@ -14,8 +14,10 @@ const Form = props => {
                     value={props.input}
                     onChange={props.handleInputChange}
                 />
-                <select className="uk-select uk-margin-small-top hw-border-radius"
-                    onChange={props.handleSelectChange}>
+                <select
+                    className="uk-select uk-margin-small-top hw-border-radius"
+                    onChange={props.handleSelectChange}
+                >
                     <option>Country</option>
                     <option>Department</option>
                 </select>
