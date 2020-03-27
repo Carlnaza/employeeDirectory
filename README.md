@@ -1,4 +1,4 @@
-#employeeDirectory
+# employeeDirectory
 
 ## About 
 - A directory of employees that a manager can use to organize employees by categories
